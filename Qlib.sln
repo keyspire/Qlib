@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qpricer_lib_core", "qpricer_lib_core\qpricer_lib_core.vcxitems", "{30B6837E-C156-43C5-8069-F6C06D783F70}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qpricer_lib", "qpricer_lib\qpricer_lib.vcxproj", "{DF35E119-11B2-415E-A471-977BE54F1232}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qpricer_lib_pricer", "qpricer_lib_pricer\qpricer_lib_pricer.vcxitems", "{A1463B55-CC06-4169-8BFA-7C7971B72D69}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Debug|x64.ActiveCfg = Debug|x64
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Debug|x64.Build.0 = Debug|x64
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Debug|x86.ActiveCfg = Debug|Win32
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Debug|x86.Build.0 = Debug|Win32
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Release|x64.ActiveCfg = Release|x64
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Release|x64.Build.0 = Release|x64
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Release|x86.ActiveCfg = Release|Win32
+		{DF35E119-11B2-415E-A471-977BE54F1232}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8BDD850-B8B1-44CD-82DE-4A84B1CE68F3}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		qpricer_lib_core\qpricer_lib_core.vcxitems*{30b6837e-c156-43c5-8069-f6c06d783f70}*SharedItemsImports = 9
+		qpricer_lib_pricer\qpricer_lib_pricer.vcxitems*{a1463b55-cc06-4169-8bfa-7c7971b72d69}*SharedItemsImports = 9
+		qpricer_lib_core\qpricer_lib_core.vcxitems*{df35e119-11b2-415e-a471-977be54f1232}*SharedItemsImports = 4
+		qpricer_lib_pricer\qpricer_lib_pricer.vcxitems*{df35e119-11b2-415e-a471-977be54f1232}*SharedItemsImports = 4
+	EndGlobalSection
+EndGlobal
