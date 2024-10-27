@@ -16,4 +16,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)bs_montecarlo.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)bs_montecarlo.cpp" />
+  </ItemGroup>
 </Project>

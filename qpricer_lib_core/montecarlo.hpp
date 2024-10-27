@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <type_traits>
 #include <vector>
 
@@ -6,7 +7,7 @@
 
 namespace qlib::core::mc {
 using path_t = std::vector<double>;
-using relation_matrix_t = std::vector<std::vector<double>&>;
+using relation_matrix_t = std::vector<std::vector<double>>;
 
 struct mc_setting {
   mc_setting() = delete;
@@ -15,44 +16,53 @@ struct mc_setting {
   const uint_fast64_t num_runs;
 };
 
-struct random_system_base_setting : mc_setting {
-  random_system_base_setting() = delete;
+struct random_system_setting {
+  random_system_setting() = delete;
+  random_system_setting(const relation_matrix_t& rel_mat,
+                        const std::shared_ptr<mc_setting> mcconfig);
   const relation_matrix_t rel_mat;
+  const std::shared_ptr<mc_setting> mcconfig;
 };
 
-struct random_process_update_base_setting : random_system_base_setting {
+struct random_process_update_base_setting {
   random_process_update_base_setting() = delete;
+  random_process_update_base_setting(
+      const int dim, const double initial_val,
+      const std::shared_ptr<random_system_setting> rsconfig);
   // number of uncertainty sources
   const int dim;
+  const std::shared_ptr<random_system_setting> rsconfig;
+  const double initial_val;
 };
 
 // T must be derived from random_process_update_base_setting
 template <class T, typename = std::enable_if_t<std::is_base_of<
-                          random_process_update_base_setting, T>::value>>
+                       random_process_update_base_setting, T>::value>>
 class i_random_process {
  public:
-  ~i_random_process() = delete;
+  virtual ~i_random_process() = 0;
 
   virtual path_t get_path(
-      const std::vector<const std::vector<double>&>& uncertainties_increments,
+      const std::vector<const std::vector<double>>& uncertainties_increments,
       const std::vector<double>& time_increments) = 0;
 
  private:
   virtual void _update(const std::vector<double> uncertainties_increment,
                        const T& setting) = 0;
 };
-
-template <class SettingRs, class SettingRpUpdate,
-          typename = std::enable_if<
-              std::is_base_of<random_system_base_setting, SettingRs>::value &&
-              std::is_base_of<random_process_update_base_setting,
-                              SettingRpUpdate>::value>>
+// このままでは payoff が実装できない…。
+template <class... SettingRpUpdate>
 class i_random_system {
+  static_assert((std::is_base_of<random_process_update_base_setting,
+                                 SettingRpUpdate>::value &&
+                 ...),
+                "Random Process Setting(s) must be properly given.");
+
  public:
-  ~i_random_system() = delete;
-  //std::vector < i_random_process<SettingRpUpdate>&>
-  virtual double payoff(std::vector<i_random_process<SettingRpUpdate>&>& rps,
-                        const SettingRs& setting) = 0;
+  virtual ~i_random_system() = 0;
+  // vector の中身ポインタにしないと object slicing ?
+  virtual double payoff(
+      std::vector<i_random_process<SettingRpUpdate>...>& rps) = 0;
 
  private:
   virtual std::vector<path_t> get_paths() = 0;
@@ -60,9 +70,12 @@ class i_random_system {
   virtual path_t get_ith_path(const int i) = 0;
 };
 
-class i_mc {
+template <class SettingRpUpdate>
+class mc {
  public:
-  ~i_mc() = delete;
-  virtual std::vector<double> run(mc_setting&) = 0;
+  mc() = delete;
+  std::vector<double> run(
+      const mc_setting&,
+      i_random_system<random_system_setting, SettingRpUpdate>& rs);
 };
 }  // namespace qlib::core::mc
