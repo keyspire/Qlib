@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qpricer_lib", "qpricer_lib\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qpricer_lib_pricer", "qpricer_lib_pricer\qpricer_lib_pricer.vcxitems", "{A1463B55-CC06-4169-8BFA-7C7971B72D69}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util_core", "util_core\util_core.vcxitems", "{B60E42FA-B80A-4BA3-947A-3D2F711727E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -35,7 +37,9 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		qpricer_lib_core\qpricer_lib_core.vcxitems*{30b6837e-c156-43c5-8069-f6c06d783f70}*SharedItemsImports = 9
 		qpricer_lib_pricer\qpricer_lib_pricer.vcxitems*{a1463b55-cc06-4169-8bfa-7c7971b72d69}*SharedItemsImports = 9
+		util_core\util_core.vcxitems*{b60e42fa-b80a-4ba3-947a-3d2f711727e8}*SharedItemsImports = 9
 		qpricer_lib_core\qpricer_lib_core.vcxitems*{df35e119-11b2-415e-a471-977be54f1232}*SharedItemsImports = 4
 		qpricer_lib_pricer\qpricer_lib_pricer.vcxitems*{df35e119-11b2-415e-a471-977be54f1232}*SharedItemsImports = 4
+		util_core\util_core.vcxitems*{df35e119-11b2-415e-a471-977be54f1232}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
