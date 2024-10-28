@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)bs_montecarlo.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)bs_montecarlo_pricer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)bs_montecarlo.cpp" />

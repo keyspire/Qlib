@@ -9,7 +9,7 @@
 namespace qlib::bs::mc {
 
 bs_update_setting::bs_update_setting(
-    double rfr, std::vector<double>& gearing_1, std::vector<double>& gearing_2,
+    double rfr, const std::vector<double>& gearing_1, const std::vector<double>& gearing_2,
     const std::vector<double>& volatilities, const double initial_val,
     const std::shared_ptr<mc::random_system_setting> rsconfig,
     const uint_fast64_t index_in_system)
@@ -42,11 +42,13 @@ void bs_random_process::_update(
     const std::vector<double>& uncertainty_increments,
     const double time_increment, const uint_fast64_t current_step) {
   double _uncertainty_part{0.};
-  
-  // a vector uncertainty_increments is a time-slice of uncertainties_increments.
-  // (dW_1(t_1), dW_2(t_1), ..., dW_n(t_1)) = time-slice at t_1 = uncertainty-increments.
-  // (time-slice at t_1, time-slice at t_2, ..., ) = uncertain"ties" increments. 
-  // Since the relation may specify a discontinuous elements in the uncertainty_increments, inner-product cannot be used below.
+
+  // a vector uncertainty_increments is a time-slice of
+  // uncertainties_increments. (dW_1(t_1), dW_2(t_1), ..., dW_n(t_1)) =
+  // time-slice at t_1 = uncertainty-increments. (time-slice at t_1, time-slice
+  // at t_2, ..., ) = uncertain"ties" increments. Since the relation may specify
+  // a discontinuous elements in the uncertainty_increments, inner-product
+  // cannot be used below.
   for (uint_fast64_t i = 0, _size = _setting.volatilities.size(); i < _size;
        ++i) {
     _uncertainty_part +=
@@ -68,19 +70,19 @@ bs_random_system<BsRps...>::bs_random_system(
     const std::tuple<BsRps...>& rps, const mc::random_system_setting& setting)
     : _rps{rps}, _setting{setting} {
   //// erase unnecessary columns in the relation matrix
-  //for (uint_fast64_t j = 0, _column_size = _rel_mat_trimmed.at(0).size(),
-  //                   _row_size = _rel_mat_trimmed.size();
-  //     j < _column_size; ++j) {
-  //  uint_fast64_t _sum = 0;
-  //  for (uint_fast64_t i = 0; i < _row_size; ++i) {
-  //    _sum += _rel_mat_trimmed.at(i).at(j);
-  //  }
-  //  if (_sum == 0) {
-  //    for (uint_fast64_t i = 0; i < _row_size; ++i) {
-  //      _rel_mat_trimmed.at(i).erase(_rel_mat_trimmed.at(i).begin() + j);
-  //    }
-  //  }
-  //}
+  // for (uint_fast64_t j = 0, _column_size = _rel_mat_trimmed.at(0).size(),
+  //                    _row_size = _rel_mat_trimmed.size();
+  //      j < _column_size; ++j) {
+  //   uint_fast64_t _sum = 0;
+  //   for (uint_fast64_t i = 0; i < _row_size; ++i) {
+  //     _sum += _rel_mat_trimmed.at(i).at(j);
+  //   }
+  //   if (_sum == 0) {
+  //     for (uint_fast64_t i = 0; i < _row_size; ++i) {
+  //       _rel_mat_trimmed.at(i).erase(_rel_mat_trimmed.at(i).begin() + j);
+  //     }
+  //   }
+  // }
 }
 
 // template <class... BsRps>
@@ -96,9 +98,8 @@ std::vector<mc::path_t> bs_random_system<BsRps...>::get_paths() {
   std::mt19937_64 _engine = qlib::utils::core::create_engine(_seed);
 
   // TODO
-  for (uint_fast64_t i = 0, _column_size = _setting.rel_vecs.size(),
-                     _num_steps = _setting.mcconfig->num_steps;
-       i < _column_size; ++i) {
+  for (uint_fast64_t i = 0, _num_steps = _setting.mcconfig->num_steps;
+       i < _setting.num_uncertainties; ++i) {
     _uncertainties_increments.at(i).resize(_num_steps);
     for (uint_fast64_t j = 0; j < _num_steps; ++j) {
       _uncertainties_increments.at(i).push_back(_dist(_engine));
@@ -120,12 +121,12 @@ std::vector<mc::path_t> bs_random_system<BsRps...>::get_paths() {
   return _paths;
 }
 
-template <class... BsRps>
-template <int N>
-void bs_random_system<BsRps...>::_register_path_for_each_tuples() {
-  _path.push_back()
-
-      return;
-}
+//template <class... BsRps>
+//template <int N>
+//void bs_random_system<BsRps...>::_register_path_for_each_tuples() {
+//  _path.push_back()
+//
+//      return;
+//}
 
 }  // namespace qlib::bs::mc

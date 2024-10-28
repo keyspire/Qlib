@@ -8,7 +8,7 @@
 
 namespace qlib::core::mc {
 using path_t = std::vector<double>;
-using relation_vectors_t = std::vector<std::vector<double>>;
+using relation_vectors_t = std::vector<std::vector<uint_fast64_t>>;
 
 struct mc_setting {
   mc_setting() = delete;
@@ -78,14 +78,14 @@ class i_random_system {
 };
 
 template <class Rs, class... Rps>
-class mc {
+class i_mc {
   static_assert((std::is_base_of<i_random_system<Rps...>, Rs>::value),
                 "Random Process Setting(s) must be properly given.");
 
  public:
-  mc() = delete;
+  ~i_mc() = delete;
   /*mc(const i_random_system<>& ix);*/
-  void run();
+  virtual void run(const mc_setting& setting) = 0;
   virtual double payoff(Rs& rs) = 0;
 };
 

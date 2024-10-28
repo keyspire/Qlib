@@ -10,8 +10,8 @@ namespace mc = qlib::core::mc;
 
 struct bs_update_setting final : mc::random_process_update_base_setting {
   bs_update_setting() = delete;
-  bs_update_setting(double rfr, std::vector<double>& gearing_1,
-                    std::vector<double>& gearing_2,
+  bs_update_setting(double rfr, const std::vector<double>& gearing_1,
+                    const std::vector<double>& gearing_2,
                     const std::vector<double>& volatilities,
                     const double initial_val,
                     const std::shared_ptr<mc::random_system_setting> rsconfig, const uint_fast64_t index_in_system);
@@ -60,7 +60,7 @@ class bs_random_system : mc::i_random_system<BsRps...> {
   std::tuple<BsRps...> _rps;
   const mc::random_system_setting _setting;
   uint_fast64_t _seed;
-  mc::relation_vectors_t _rel_mat_trimmed;
+  //mc::relation_vectors_t _rel_mat_trimmed;
   std::vector<std::vector<double>> _uncertainties_increments;
   std::vector<mc::path_t> _paths;
   std::normal_distribution<> _dist{0.0, 1.0};
