@@ -18,6 +18,7 @@ struct mc_setting {
   const uint_fast64_t num_steps;
   const uint_fast64_t num_runs;
   std::random_device seed_gen;
+  std::string flag;
 };
 
 struct random_system_setting {
@@ -74,19 +75,16 @@ class i_random_system {
 
  public:
   virtual ~i_random_system() = 0;
-  virtual std::vector<path_t> get_paths() = 0;
+  virtual std::unique_ptr<std::vector<path_t>> get_paths() = 0;
 };
 
-template <class Rs, class... Rps>
 class i_mc {
-  static_assert((std::is_base_of<i_random_system<Rps...>, Rs>::value),
-                "Random Process Setting(s) must be properly given.");
-
  public:
-  ~i_mc() = delete;
-  /*mc(const i_random_system<>& ix);*/
-  virtual void run(const mc_setting& setting) = 0;
-  virtual double payoff(Rs& rs) = 0;
+  virtual ~i_mc() = 0;
+  virtual void run() = 0;
+
+ private:
+  virtual double payoff() = 0;
 };
 
 }  // namespace qlib::core::mc

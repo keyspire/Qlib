@@ -9,7 +9,8 @@
 namespace qlib::bs::mc {
 
 bs_update_setting::bs_update_setting(
-    double rfr, const std::vector<double>& gearing_1, const std::vector<double>& gearing_2,
+    double rfr, const std::vector<double>& gearing_1,
+    const std::vector<double>& gearing_2,
     const std::vector<double>& volatilities, const double initial_val,
     const std::shared_ptr<mc::random_system_setting> rsconfig,
     const uint_fast64_t index_in_system)
@@ -60,44 +61,20 @@ void bs_random_process::_update(
       _setting.rfr * _setting.gearing_1.at(current_step) * time_increment +
       std::sqrt(time_increment) * _setting.gearing_1.at(current_step) *
           _uncertainty_part;
-  /* std::inner_product(_setting.volatilities.begin(),
-                      _setting.volatilities.end(),
-                      uncertainties_increment.begin(), 0.);*/
 }
 
 template <class... BsRps>
 bs_random_system<BsRps...>::bs_random_system(
     const std::tuple<BsRps...>& rps, const mc::random_system_setting& setting)
-    : _rps{rps}, _setting{setting} {
-  //// erase unnecessary columns in the relation matrix
-  // for (uint_fast64_t j = 0, _column_size = _rel_mat_trimmed.at(0).size(),
-  //                    _row_size = _rel_mat_trimmed.size();
-  //      j < _column_size; ++j) {
-  //   uint_fast64_t _sum = 0;
-  //   for (uint_fast64_t i = 0; i < _row_size; ++i) {
-  //     _sum += _rel_mat_trimmed.at(i).at(j);
-  //   }
-  //   if (_sum == 0) {
-  //     for (uint_fast64_t i = 0; i < _row_size; ++i) {
-  //       _rel_mat_trimmed.at(i).erase(_rel_mat_trimmed.at(i).begin() + j);
-  //     }
-  //   }
-  // }
-}
-
-// template <class... BsRps>
-// template <int N>
-// mc::path_t bs_random_system<BsRps...>::get_ith_path() {
-//   return std::get<N>(_rps).get_path();
-// }
+    : _rps{rps}, _setting{setting} {};
 
 template <class... BsRps>
-std::vector<mc::path_t> bs_random_system<BsRps...>::get_paths() {
+std::unique_ptr<std::vector<mc::path_t>>
+bs_random_system<BsRps...>::get_paths() {
   // init seed
   _seed = _setting.mcconfig->seed_gen();
   std::mt19937_64 _engine = qlib::utils::core::create_engine(_seed);
 
-  // TODO
   for (uint_fast64_t i = 0, _num_steps = _setting.mcconfig->num_steps;
        i < _setting.num_uncertainties; ++i) {
     _uncertainties_increments.at(i).resize(_num_steps);
@@ -105,7 +82,8 @@ std::vector<mc::path_t> bs_random_system<BsRps...>::get_paths() {
       _uncertainties_increments.at(i).push_back(_dist(_engine));
     }
   }
-
+  // crear paths.
+  _paths.clear();
   // args are assumed as rps
   std::apply(
       [this](auto&&... args) {
@@ -118,15 +96,15 @@ std::vector<mc::path_t> bs_random_system<BsRps...>::get_paths() {
 
   // another implementation
 
-  return _paths;
+  return std::make_unique<std::vector<mc::path_t>>(_paths);
 }
 
-//template <class... BsRps>
-//template <int N>
-//void bs_random_system<BsRps...>::_register_path_for_each_tuples() {
-//  _path.push_back()
+// template <class... BsRps>
+// template <int N>
+// void bs_random_system<BsRps...>::_register_path_for_each_tuples() {
+//   _path.push_back()
 //
-//      return;
-//}
+//       return;
+// }
 
 }  // namespace qlib::bs::mc
