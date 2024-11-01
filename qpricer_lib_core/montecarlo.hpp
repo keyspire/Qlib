@@ -70,7 +70,7 @@ class i_random_process {
 // ‚±‚Ì‚Ü‚Ü‚Å‚Í payoff ‚ªÀ‘•‚Å‚«‚È‚¢cB
 template <class... Rps>
 class i_random_system {
-  static_assert(qlib::utils::core::all_base_of<i_random_process, Rps>(),
+  static_assert(qlib::utils::core::all_base_of<i_random_process, Rps...>(),
                 "Random Process Setting(s) must be properly given.");
 
  public:
